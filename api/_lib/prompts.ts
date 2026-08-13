@@ -1,5 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { ApiError } from "./http";
+import { ApiError } from "./http.js";
 
 /**
  * Prompt templates and scoring rubrics live in the database, not in code.
