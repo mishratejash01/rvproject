@@ -1,5 +1,5 @@
-import { env } from "./env";
-import { ApiError } from "./http";
+import { env } from "./env.js";
+import { ApiError } from "./http.js";
 
 /**
  * Client for the Gemini Interactions API.
