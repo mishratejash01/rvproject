@@ -48,10 +48,11 @@ function buildBody(opts: CallOptions, stream: boolean) {
   if (opts.responseFormat) body.response_format = opts.responseFormat;
   if (stream) body.stream = true;
 
+  // Sampling settings belong under generation_config; the API rejects them at the root.
   const generation: Record<string, unknown> = {};
   if (typeof opts.temperature === "number") generation.temperature = opts.temperature;
   if (opts.maxOutputTokens) generation.max_output_tokens = opts.maxOutputTokens;
-  if (Object.keys(generation).length > 0) Object.assign(body, generation);
+  if (Object.keys(generation).length > 0) body.generation_config = generation;
 
   return body;
 }
