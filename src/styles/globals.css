@@ -1,0 +1,137 @@
+@import "tailwindcss";
+
+/* ─── LaunchPad RV design tokens — minimal, professional, neutral ────
+   Restraint is the identity: neutral surfaces, precise type, one muted
+   accent used sparingly. No gradients, no glow, no bright colour. */
+
+@theme {
+  --font-display: "Space Grotesk Variable", "Space Grotesk", system-ui, sans-serif;
+  --font-sans: "Inter Variable", "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --color-bg: var(--lp-bg);
+  --color-surface: var(--lp-surface);
+  --color-raised: var(--lp-raised);
+  --color-overlay: var(--lp-overlay);
+  --color-line: var(--lp-line);
+  --color-line-strong: var(--lp-line-strong);
+  --color-ink: var(--lp-ink);
+  --color-ink-mute: var(--lp-ink-mute);
+  --color-ink-faint: var(--lp-ink-faint);
+  --color-invert: var(--lp-invert);
+  --color-invert-ink: var(--lp-invert-ink);
+
+  /* Single restrained accent (Linear-class muted indigo) + desaturated semantics */
+  --color-accent: #5e6ad2;
+  --color-accent-soft: var(--lp-accent-soft);
+  --color-good: #3fb68b;
+  --color-good-soft: var(--lp-good-soft);
+  --color-warn: #c9a227;
+  --color-warn-soft: var(--lp-warn-soft);
+  --color-bad: #d65550;
+  --color-bad-soft: var(--lp-bad-soft);
+
+  --radius-card: 0.75rem;
+
+  --animate-rise: rise 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+/* Theme variables — dark default, light first-class. Pure neutrals, no tint. */
+:root,
+[data-theme="dark"] {
+  --lp-bg: #0b0c0e;
+  --lp-surface: #101114;
+  --lp-raised: #16181c;
+  --lp-overlay: #1c1f24;
+  --lp-line: rgba(255, 255, 255, 0.07);
+  --lp-line-strong: rgba(255, 255, 255, 0.14);
+  --lp-ink: #e8eaed;
+  --lp-ink-mute: #9aa0a8;
+  --lp-ink-faint: #5f656d;
+  --lp-invert: #e8eaed;
+  --lp-invert-ink: #0b0c0e;
+  --lp-accent-soft: rgba(94, 106, 210, 0.13);
+  --lp-good-soft: rgba(63, 182, 139, 0.12);
+  --lp-warn-soft: rgba(201, 162, 39, 0.12);
+  --lp-bad-soft: rgba(214, 85, 80, 0.12);
+  color-scheme: dark;
+}
+
+[data-theme="light"] {
+  --lp-bg: #fafbfc;
+  --lp-surface: #ffffff;
+  --lp-raised: #ffffff;
+  --lp-overlay: #f2f3f5;
+  --lp-line: rgba(16, 18, 22, 0.08);
+  --lp-line-strong: rgba(16, 18, 22, 0.16);
+  --lp-ink: #1a1d21;
+  --lp-ink-mute: #5c6470;
+  --lp-ink-faint: #9aa2ad;
+  --lp-invert: #1a1d21;
+  --lp-invert-ink: #fafbfc;
+  --lp-accent-soft: rgba(94, 106, 210, 0.09);
+  --lp-good-soft: rgba(63, 182, 139, 0.1);
+  --lp-warn-soft: rgba(201, 162, 39, 0.12);
+  --lp-bad-soft: rgba(214, 85, 80, 0.1);
+  color-scheme: light;
+}
+
+/* Dark-variant utility hook: `dark:` follows the data-theme attribute */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+body {
+  background: var(--lp-bg);
+  color: var(--lp-ink);
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: rgba(94, 106, 210, 0.28);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--lp-line-strong) transparent;
+}
+
+/* Utility layer */
+@utility card {
+  background: var(--lp-surface);
+  border: 1px solid var(--lp-line);
+  border-radius: var(--radius-card);
+}
+
+@utility card-raised {
+  background: var(--lp-raised);
+  border: 1px solid var(--lp-line);
+  border-radius: var(--radius-card);
+}
+
+@utility ring-focus {
+  outline: 2px solid transparent;
+  &:focus-visible {
+    outline: 2px solid #5e6ad2;
+    outline-offset: 2px;
+  }
+}
+
+/* Numeric emphasis — scores, money, metrics all read in mono */
+@utility num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
