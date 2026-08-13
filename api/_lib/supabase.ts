@@ -1,6 +1,6 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
-import { env } from "./env";
-import { ApiError } from "./http";
+import { env } from "./env.js";
+import { ApiError } from "./http.js";
 
 /**
  * Service-role client. Bypasses RLS, so every call site must check ownership
