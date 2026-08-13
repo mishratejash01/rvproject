@@ -1,8 +1,8 @@
-import { streamText, userStep, modelStep, type Step } from "./_lib/gemini";
-import { buildSystemPrompt } from "./_lib/prompts";
-import { buildFullContext } from "./_lib/context";
-import { serviceClient, requireUser, requireOwnedProject, logActivity } from "./_lib/supabase";
-import { ApiError, errorResponse, readJson, requirePost, requireField } from "./_lib/http";
+import { streamText, userStep, modelStep, type Step } from "./_lib/gemini.js";
+import { buildSystemPrompt } from "./_lib/prompts.js";
+import { buildFullContext } from "./_lib/context.js";
+import { serviceClient, requireUser, requireOwnedProject, logActivity } from "./_lib/supabase.js";
+import { ApiError, errorResponse, readJson, requirePost, requireField } from "./_lib/http.js";
 
 export const config = { maxDuration: 90 };
 
