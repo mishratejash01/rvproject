@@ -4,11 +4,12 @@ import { pivotsSchema, toGeminiSchema, type PivotsOutput } from "./_lib/schemas.
 import { buildFullContext, latest } from "./_lib/context.js";
 import { serviceClient, requireUser, requireOwnedProject, logActivity } from "./_lib/supabase.js";
 import { ApiError, errorResponse, json, readJson, requirePost, requireField } from "./_lib/http.js";
+import { nodeHandler } from "./_lib/node-adapter.js";
 
 export const config = { maxDuration: 60 };
 
 /** Module 3 — Intelligent Pivot Matrix. */
-export default async function handler(req: Request): Promise<Response> {
+async function handler(req: Request): Promise<Response> {
   try {
     requirePost(req);
     const body = await readJson<Record<string, unknown>>(req);
@@ -70,3 +71,5 @@ export default async function handler(req: Request): Promise<Response> {
     return errorResponse(err);
   }
 }
+
+export default nodeHandler(handler);
