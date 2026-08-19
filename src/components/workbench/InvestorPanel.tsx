@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Landmark, Mail, Linkedin, Copy, Send, ExternalLink, GraduationCap } from "lucide-react";
+import { Landmark, Mail, Copy, Send, ExternalLink, GraduationCap, MessageSquare } from "lucide-react";
 import { toast } from "sonner";
 import { Card, CardBody, Badge, EmptyState } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
@@ -174,7 +174,7 @@ export function InvestorPanel({
                     {inv.linkedin_url && (
                       <a href={inv.linkedin_url} target="_blank" rel="noreferrer noopener">
                         <Button size="sm" variant="ghost">
-                          <Linkedin className="h-3.5 w-3.5" />
+                          <MessageSquare className="h-3.5 w-3.5" />
                           LinkedIn
                         </Button>
                       </a>
