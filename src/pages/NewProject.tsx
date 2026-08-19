@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight, Sparkles } from "lucide-react";
 import { toast } from "sonner";
-import * as Icons from "lucide-react";
+import { DomainIcon } from "@/components/DomainIcon";
 import { useDomains } from "@/hooks/useReference";
 import { useCreateProject } from "@/hooks/useProjects";
 import { Button } from "@/components/ui/Button";
@@ -178,7 +178,6 @@ export default function NewProject() {
                 ) : (
                   <div className="grid gap-2 sm:grid-cols-2">
                     {domains?.map((domain) => {
-                      const Icon = (Icons as any)[toPascal(domain.icon)] ?? Icons.Circle;
                       const selected = draft.domain_id === domain.id;
                       return (
                         <button
@@ -191,7 +190,10 @@ export default function NewProject() {
                               : "border-line hover:border-line-strong",
                           )}
                         >
-                          <Icon className={cn("h-4 w-4", selected ? "text-accent" : "text-ink-mute")} />
+                          <DomainIcon
+                            name={domain.icon}
+                            className={cn("h-4 w-4", selected ? "text-accent" : "text-ink-mute")}
+                          />
                           <p className="mt-2 text-[0.8125rem] font-medium text-ink">{domain.name}</p>
                           <p className="mt-0.5 text-[0.75rem] leading-relaxed text-ink-faint">
                             {domain.description}
@@ -238,10 +240,3 @@ export default function NewProject() {
   );
 }
 
-/** Database stores lucide names in kebab-case; the icon set exports PascalCase. */
-function toPascal(name: string) {
-  return name
-    .split("-")
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join("");
-}
