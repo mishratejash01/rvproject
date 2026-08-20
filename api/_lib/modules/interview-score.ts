@@ -1,19 +1,16 @@
-import { generateObject } from "./_lib/gemini.js";
-import { buildSystemPrompt } from "./_lib/prompts.js";
-import { interviewScoreSchema, toGeminiSchema, type InterviewScoreOutput } from "./_lib/schemas.js";
-import { renderProject } from "./_lib/context.js";
-import { serviceClient, requireUser, requireOwnedProject, logActivity } from "./_lib/supabase.js";
-import { ApiError, errorResponse, json, readJson, requirePost, requireField } from "./_lib/http.js";
-import { nodeHandler } from "./_lib/node-adapter.js";
-
-export const config = { maxDuration: 60 };
+import { generateObject } from "../gemini.js";
+import { buildSystemPrompt } from "../prompts.js";
+import { interviewScoreSchema, toGeminiSchema, type InterviewScoreOutput } from "../schemas.js";
+import { renderProject } from "../context.js";
+import { serviceClient, requireUser, requireOwnedProject, logActivity } from "../supabase.js";
+import { ApiError, errorResponse, json, readJson, requirePost, requireField } from "../http.js";
 
 /**
  * Interview Coach — grades a real customer interview against The Mom Test.
  * The score attaches to the evidence row, so a weak interview visibly counts
  * for less than a strong one.
  */
-async function handler(req: Request): Promise<Response> {
+export async function handler(req: Request): Promise<Response> {
   try {
     requirePost(req);
     const body = await readJson<Record<string, unknown>>(req);
@@ -71,5 +68,3 @@ async function handler(req: Request): Promise<Response> {
     return errorResponse(err);
   }
 }
-
-export default nodeHandler(handler);
