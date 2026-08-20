@@ -38,26 +38,29 @@ async function post<T>(path: string, payload: Record<string, unknown>): Promise<
   return (await res.json()) as T;
 }
 
+/** All structured AI actions are served by one function, selected by `action`. */
+const MODULE = (action: string) => `/api/module?action=${action}`;
+
 export const api = {
   validate: (projectId: string, roastMode?: boolean) =>
-    post<{ validation: any }>("/api/validate", { projectId, roastMode }),
+    post<{ validation: any }>(MODULE("validate"), { projectId, roastMode }),
 
   investibility: (projectId: string, roastMode?: boolean) =>
-    post<{ report: any }>("/api/investibility", { projectId, roastMode }),
+    post<{ report: any }>(MODULE("investibility"), { projectId, roastMode }),
 
   pivots: (projectId: string, roastMode?: boolean) =>
-    post<{ pivots: any[] }>("/api/pivots", { projectId, roastMode }),
+    post<{ pivots: any[] }>(MODULE("pivots"), { projectId, roastMode }),
 
-  deck: (projectId: string) => post<{ deck: any; ask: any }>("/api/deck", { projectId }),
+  deck: (projectId: string) => post<{ deck: any; ask: any }>(MODULE("deck"), { projectId }),
 
-  matches: (projectId: string) => post<{ matches: any[] }>("/api/matches", { projectId }),
+  matches: (projectId: string) => post<{ matches: any[] }>(MODULE("matches"), { projectId }),
 
-  grants: (projectId: string) => post<{ matches: any[] }>("/api/grants", { projectId }),
+  grants: (projectId: string) => post<{ matches: any[] }>(MODULE("grants"), { projectId }),
 
-  benchmarks: (projectId: string) => post<{ comparisons: any[] }>("/api/benchmarks", { projectId }),
+  benchmarks: (projectId: string) => post<{ comparisons: any[] }>(MODULE("benchmarks"), { projectId }),
 
   outreach: (projectId: string, investorId: number) =>
-    post<{ drafts: any[] }>("/api/outreach", { projectId, investorId }),
+    post<{ drafts: any[] }>(MODULE("outreach"), { projectId, investorId }),
 
   /**
    * Streams a war-room reply. `onToken` fires per chunk; resolves with the full
@@ -104,19 +107,19 @@ export const api = {
 
 export const api2 = {
   interviewScore: (projectId: string, evidenceId: string) =>
-    post<{ evidence: any }>("/api/interview-score", { projectId, evidenceId }),
+    post<{ evidence: any }>(MODULE("interview-score"), { projectId, evidenceId }),
 
   readiness: (projectId: string, scale: "trl" | "irl") =>
-    post<{ assessment: any; detail: any }>("/api/readiness", { projectId, scale }),
+    post<{ assessment: any; detail: any }>(MODULE("readiness"), { projectId, scale }),
 
   priorArt: (projectId: string, findings: unknown[] = []) =>
-    post<{ search: any; detail: any }>("/api/prior-art", { projectId, findings }),
+    post<{ search: any; detail: any }>(MODULE("prior-art"), { projectId, findings }),
 
   cofounderMatch: (projectId: string) =>
-    post<{ matches: any[]; still_missing: string | null }>("/api/cofounder-match", { projectId }),
+    post<{ matches: any[]; still_missing: string | null }>(MODULE("cofounder-match"), { projectId }),
 
-  problemMatch: (projectId: string) => post<{ fits: any[] }>("/api/problem-match", { projectId }),
+  problemMatch: (projectId: string) => post<{ fits: any[] }>(MODULE("problem-match"), { projectId }),
 
   foundersAgreement: (projectId: string) =>
-    post<{ agreement: any }>("/api/founders-agreement", { projectId }),
+    post<{ agreement: any }>(MODULE("founders-agreement"), { projectId }),
 };
