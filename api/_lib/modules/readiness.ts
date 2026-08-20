@@ -70,6 +70,8 @@ export async function handler(req: Request): Promise<Response> {
       .from("readiness_assessments")
       .insert({
         project_id: project.id,
+        // The service role has no auth.uid(), so ownership is set explicitly.
+        assessed_by: user.id,
         scale,
         level: parsed.data.level,
         justification: parsed.data.justification,
