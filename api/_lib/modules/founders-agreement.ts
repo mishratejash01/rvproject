@@ -1,18 +1,15 @@
-import { generateText } from "./_lib/gemini.js";
-import { buildSystemPrompt } from "./_lib/prompts.js";
-import { renderProject, nextVersion } from "./_lib/context.js";
-import { serviceClient, requireUser, requireOwnedProject, logActivity } from "./_lib/supabase.js";
-import { ApiError, errorResponse, json, readJson, requirePost, requireField } from "./_lib/http.js";
-import { nodeHandler } from "./_lib/node-adapter.js";
-
-export const config = { maxDuration: 90 };
+import { generateText } from "../gemini.js";
+import { buildSystemPrompt } from "../prompts.js";
+import { renderProject, nextVersion } from "../context.js";
+import { serviceClient, requireUser, requireOwnedProject, logActivity } from "../supabase.js";
+import { ApiError, errorResponse, json, readJson, requirePost, requireField } from "../http.js";
 
 /**
  * Founders' agreement template. Student teams split equity equally on day one
  * with no vesting, and it detonates when someone graduates or takes a job.
  * Output is explicitly a template for discussion, never legal advice.
  */
-async function handler(req: Request): Promise<Response> {
+export async function handler(req: Request): Promise<Response> {
   try {
     requirePost(req);
     const body = await readJson<Record<string, unknown>>(req);
@@ -90,5 +87,3 @@ async function handler(req: Request): Promise<Response> {
     return errorResponse(err);
   }
 }
-
-export default nodeHandler(handler);
