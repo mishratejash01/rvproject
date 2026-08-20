@@ -52,6 +52,8 @@ export async function handler(req: Request): Promise<Response> {
       .from("prior_art_searches")
       .insert({
         project_id: project.id,
+        // The service role has no auth.uid(), so ownership is set explicitly.
+        searched_by: user.id,
         search_strategy: parsed.data.search_strategy,
         findings,
         novelty_verdict: parsed.data.novelty_verdict,
