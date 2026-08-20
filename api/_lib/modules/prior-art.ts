@@ -1,12 +1,9 @@
-import { generateObject } from "./_lib/gemini.js";
-import { buildSystemPrompt } from "./_lib/prompts.js";
-import { priorArtSchema, toGeminiSchema, type PriorArtOutput } from "./_lib/schemas.js";
-import { renderProject } from "./_lib/context.js";
-import { serviceClient, requireUser, requireOwnedProject, logActivity } from "./_lib/supabase.js";
-import { ApiError, errorResponse, json, readJson, requirePost, requireField } from "./_lib/http.js";
-import { nodeHandler } from "./_lib/node-adapter.js";
-
-export const config = { maxDuration: 60 };
+import { generateObject } from "../gemini.js";
+import { buildSystemPrompt } from "../prompts.js";
+import { priorArtSchema, toGeminiSchema, type PriorArtOutput } from "../schemas.js";
+import { renderProject } from "../context.js";
+import { serviceClient, requireUser, requireOwnedProject, logActivity } from "../supabase.js";
+import { ApiError, errorResponse, json, readJson, requirePost, requireField } from "../http.js";
 
 /**
  * Prior-art gate. Produces a search strategy the student runs themselves, then
@@ -14,7 +11,7 @@ export const config = { maxDuration: 60 };
  * searched the patent databases — the verdict stays "inconclusive" until real
  * findings are supplied.
  */
-async function handler(req: Request): Promise<Response> {
+export async function handler(req: Request): Promise<Response> {
   try {
     requirePost(req);
     const body = await readJson<Record<string, unknown>>(req);
@@ -77,5 +74,3 @@ async function handler(req: Request): Promise<Response> {
     return errorResponse(err);
   }
 }
-
-export default nodeHandler(handler);
