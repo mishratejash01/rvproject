@@ -41,13 +41,35 @@ async function handler(req: Request): Promise<Response> {
     }
     const v = parsed.data;
 
+    /*
+     * Evidence cap. The model's judgement is kept as `ai_score`, but the
+     * headline number is bounded by what the team can actually prove:
+     *   cap = 40 + 0.6 x evidence_score
+     * With nothing logged the ceiling is 40, which is the point — a score
+     * should describe how much is known, not how much the model liked the
+     * writing. Computed in the database so it stays auditable.
+     */
+    const { data: evScore } = await db.rpc("project_evidence_score", { p_project_id: project.id });
+    const evidenceScore = Number(evScore ?? 0);
+    const evidenceCap = Math.min(100, 40 + 0.6 * evidenceScore);
+    const { count: evidenceCount } = await db
+      .from("evidence")
+      .select("id", { count: "exact", head: true })
+      .eq("project_id", project.id);
+
+    const cappedScore = Math.min(v.viability_score, Math.round(evidenceCap));
+
     const version = await nextVersion(db, "validations", project.id);
     const { data: saved, error } = await db
       .from("validations")
       .insert({
         project_id: project.id,
         version,
-        viability_score: v.viability_score,
+        viability_score: cappedScore,
+        ai_score: v.viability_score,
+        evidence_score: evidenceScore,
+        evidence_cap: Math.round(evidenceCap * 100) / 100,
+        evidence_count: evidenceCount ?? 0,
         pain_classification: v.pain_classification,
         sub_scores: v.sub_scores,
         tam_usd: v.market_sizing.tam.value_usd,
@@ -70,7 +92,9 @@ async function handler(req: Request): Promise<Response> {
       await db.from("projects").update({ status: "validated" }).eq("id", project.id);
     }
     await logActivity(db, user.id, project.id, "validated", {
-      score: v.viability_score,
+      score: cappedScore,
+      ai_score: v.viability_score,
+      evidence_score: evidenceScore,
       classification: v.pain_classification,
       version,
     });
