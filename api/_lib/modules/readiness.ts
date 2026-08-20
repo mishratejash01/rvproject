@@ -1,19 +1,16 @@
-import { generateObject } from "./_lib/gemini.js";
-import { buildSystemPrompt, fillTemplate } from "./_lib/prompts.js";
-import { readinessSchema, toGeminiSchema, type ReadinessOutput } from "./_lib/schemas.js";
-import { buildFullContext } from "./_lib/context.js";
-import { serviceClient, requireUser, requireOwnedProject, logActivity } from "./_lib/supabase.js";
-import { ApiError, errorResponse, json, readJson, requirePost, requireField } from "./_lib/http.js";
-import { nodeHandler } from "./_lib/node-adapter.js";
-
-export const config = { maxDuration: 60 };
+import { generateObject } from "../gemini.js";
+import { buildSystemPrompt, fillTemplate } from "../prompts.js";
+import { readinessSchema, toGeminiSchema, type ReadinessOutput } from "../schemas.js";
+import { buildFullContext } from "../context.js";
+import { serviceClient, requireUser, requireOwnedProject, logActivity } from "../supabase.js";
+import { ApiError, errorResponse, json, readJson, requirePost, requireField } from "../http.js";
 
 /**
  * TRL / IRL assessment. The level is claimed against published scale
  * definitions and must cite the project's own evidence, because Indian grant
  * applications ask for TRL directly and an inflated claim gets caught.
  */
-async function handler(req: Request): Promise<Response> {
+export async function handler(req: Request): Promise<Response> {
   try {
     requirePost(req);
     const body = await readJson<Record<string, unknown>>(req);
@@ -91,5 +88,3 @@ async function handler(req: Request): Promise<Response> {
     return errorResponse(err);
   }
 }
-
-export default nodeHandler(handler);
