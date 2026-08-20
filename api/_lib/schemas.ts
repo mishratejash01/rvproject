@@ -175,3 +175,79 @@ export const elevatorFeedbackSchema = z.object({
   what_failed: z.array(z.string()),
   rewritten_pitch: z.string(),
 });
+
+/* ── Evidence: Mom Test interview scoring ──────────────────────────── */
+
+export const interviewScoreSchema = z.object({
+  what_worked: z.array(z.string()).describe("Quote the good questions"),
+  what_failed: z.array(z.string()).describe("Quote the bad questions and say why"),
+  strongest_signal: z.string(),
+  biggest_unknown: z.string(),
+  rewritten_questions: z.array(z.string()).describe("Three Mom Test rewrites"),
+  score,
+});
+export type InterviewScoreOutput = z.infer<typeof interviewScoreSchema>;
+
+/* ── Readiness: TRL / IRL ──────────────────────────────────────────── */
+
+export const readinessSchema = z.object({
+  justification: z.string(),
+  evidence_cited: z.array(z.string()),
+  level: z.number().int().min(1).max(9),
+  is_self_declared: z.boolean().describe("True when no supporting evidence exists"),
+  gaps: z.array(z.object({ gap: z.string(), blocks_level: z.number().int() })),
+  next_actions: z.array(z.object({ action: z.string(), effort: z.enum(["low", "medium", "high"]) })),
+});
+export type ReadinessOutput = z.infer<typeof readinessSchema>;
+
+/* ── IP: prior art ─────────────────────────────────────────────────── */
+
+export const priorArtSchema = z.object({
+  search_strategy: z.object({
+    queries: z.array(z.string()),
+    classification_codes: z.array(z.object({ code: z.string(), covers: z.string() })),
+    databases: z.array(z.string()),
+    novelty_hinges_on: z.string(),
+  }),
+  novelty_verdict: z.enum(["likely_novel", "crowded", "blocked", "inconclusive"]),
+  novelty_analysis: z.string(),
+  differentiators: z.array(z.object({ feature: z.string(), likely_novel: z.boolean(), note: z.string() })),
+  filing_recommendation: z.enum([
+    "provisional",
+    "complete",
+    "trade_secret",
+    "defensive_publication",
+    "not_yet",
+    "seek_counsel",
+  ]),
+  recommended_action: z.string(),
+  disclosure_warning: z.string().nullable(),
+});
+export type PriorArtOutput = z.infer<typeof priorArtSchema>;
+
+/* ── Team: co-founder fit ──────────────────────────────────────────── */
+
+export const cofounderRationaleSchema = z.object({
+  assessments: z.array(
+    z.object({
+      candidate_name: z.string(),
+      gap_closed: z.string(),
+      friction_risk: z.string(),
+    }),
+  ),
+  still_missing: z.string(),
+});
+
+/* ── Industry: problem fit ─────────────────────────────────────────── */
+
+export const problemFitSchema = z.object({
+  fits: z.array(
+    z.object({
+      problem_title: z.string(),
+      rationale: z.string(),
+      capability_gap: z.string(),
+      is_services_engagement: z.boolean(),
+      fit_score: score,
+    }),
+  ),
+});
