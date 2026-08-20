@@ -1,15 +1,12 @@
-import { generateObject } from "./_lib/gemini.js";
-import { buildSystemPrompt } from "./_lib/prompts.js";
-import { investibilitySchema, toGeminiSchema, type InvestibilityOutput } from "./_lib/schemas.js";
-import { buildFullContext, nextVersion } from "./_lib/context.js";
-import { serviceClient, requireUser, requireOwnedProject, logActivity } from "./_lib/supabase.js";
-import { ApiError, errorResponse, json, readJson, requirePost, requireField } from "./_lib/http.js";
-import { nodeHandler } from "./_lib/node-adapter.js";
-
-export const config = { maxDuration: 60 };
+import { generateObject } from "../gemini.js";
+import { buildSystemPrompt } from "../prompts.js";
+import { investibilitySchema, toGeminiSchema, type InvestibilityOutput } from "../schemas.js";
+import { buildFullContext, nextVersion } from "../context.js";
+import { serviceClient, requireUser, requireOwnedProject, logActivity } from "../supabase.js";
+import { ApiError, errorResponse, json, readJson, requirePost, requireField } from "../http.js";
 
 /** Module 2 — VC Investibility & Readiness Meter. */
-async function handler(req: Request): Promise<Response> {
+export async function handler(req: Request): Promise<Response> {
   try {
     requirePost(req);
     const body = await readJson<Record<string, unknown>>(req);
@@ -74,5 +71,3 @@ async function handler(req: Request): Promise<Response> {
     return errorResponse(err);
   }
 }
-
-export default nodeHandler(handler);
