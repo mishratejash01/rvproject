@@ -99,3 +99,24 @@ export const api = {
     return { text, sessionId };
   },
 };
+
+/* ── Modules added in the second build phase ───────────────────────── */
+
+export const api2 = {
+  interviewScore: (projectId: string, evidenceId: string) =>
+    post<{ evidence: any }>("/api/interview-score", { projectId, evidenceId }),
+
+  readiness: (projectId: string, scale: "trl" | "irl") =>
+    post<{ assessment: any; detail: any }>("/api/readiness", { projectId, scale }),
+
+  priorArt: (projectId: string, findings: unknown[] = []) =>
+    post<{ search: any; detail: any }>("/api/prior-art", { projectId, findings }),
+
+  cofounderMatch: (projectId: string) =>
+    post<{ matches: any[]; still_missing: string | null }>("/api/cofounder-match", { projectId }),
+
+  problemMatch: (projectId: string) => post<{ fits: any[] }>("/api/problem-match", { projectId }),
+
+  foundersAgreement: (projectId: string) =>
+    post<{ agreement: any }>("/api/founders-agreement", { projectId }),
+};
