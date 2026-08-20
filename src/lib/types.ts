@@ -26,7 +26,7 @@ export type Profile = {
   campus_id: number | null;
   branch: string | null;
   year_of_study: number | null;
-  role: "student" | "admin";
+  role: "student" | "faculty" | "mentor" | "admin";
   is_guest: boolean;
   created_at: string;
   campus?: Campus | null;
